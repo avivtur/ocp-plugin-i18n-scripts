@@ -55,7 +55,69 @@ npm install --save-dev ocp-plugin-i18n-scripts
 }
 ```
 
-### 3. Add npm scripts to your `package.json`
+### 3. Create `i18next-parser.config.ts` in your project root
+
+This config tells i18next-parser how to extract translation keys from your source files. The `CustomJSONLexer` extracts keys matching the `%...%` pattern from plugin extension files. It must be inlined (not imported from a file) because i18next-parser bundles the config as ESM.
+
+```typescript
+import type { UserConfig } from 'i18next-parser';
+
+const CustomJSONLexer = {
+  extract(content: string): { key: string }[] {
+    const keys: { key: string }[] = [];
+    try {
+      const parsed = JSON.parse(content) as Record<string, unknown>;
+      const scan = (obj: unknown): void => {
+        if (typeof obj === 'string') {
+          const match = obj.match(/^%(?<key>.+)%$/u);
+          if (match?.groups?.['key']) {
+            keys.push({ key: match.groups['key'] });
+          }
+        } else if (Array.isArray(obj)) {
+          obj.forEach(scan);
+        } else if (obj && typeof obj === 'object') {
+          Object.values(obj).forEach(scan);
+        }
+      };
+      scan(parsed);
+    } catch {
+      // not valid JSON, skip
+    }
+    return keys;
+  },
+};
+
+const config: UserConfig = {
+  createOldCatalogs: false,
+  defaultNamespace: 'plugin__your-plugin-name',
+  defaultValue(_locale, _namespace, key: string | undefined): string {
+    return key ?? '';
+  },
+  keySeparator: false,
+  lexers: {
+    default: ['JsxLexer'],
+    json: [CustomJSONLexer] as unknown as UserConfig['lexers'],
+    tsx: [
+      {
+        componentFunctions: ['Trans', 'ForkliftTrans'],
+        lexer: 'JsxLexer',
+      },
+    ],
+  } as UserConfig['lexers'],
+  locales: ['en', 'es', 'fr', 'ja', 'ko', 'zh'],
+  namespaceSeparator: '~',
+  sort: true,
+};
+
+export default config;
+```
+
+Adjust the following for your plugin:
+- `defaultNamespace` -- set to your plugin's i18next namespace (must match `pluginName` in config)
+- `componentFunctions` in the `tsx` lexer -- add any custom `Trans` components your plugin uses
+- `locales` -- must match the languages in `i18n-scripts.config.json` (use filesystem names, e.g., `zh` not `zh-cn`)
+
+### 4. Add npm scripts to your `package.json`
 
 ```json
 {
