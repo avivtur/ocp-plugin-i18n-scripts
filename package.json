@@ -1,0 +1,43 @@
+{
+  "name": "ocp-plugin-i18n-scripts",
+  "version": "1.0.0",
+  "description": "Reusable i18n/localization scripts for OpenShift Console dynamic plugins with Memsource/Phrase integration",
+  "license": "Apache-2.0",
+  "bin": {
+    "ocp-i18n-defaults": "./lib/set-english-defaults.js",
+    "ocp-i18n-fix-plurals": "./lib/fix-plural-overrides.js",
+    "ocp-i18n-dummy-locale": "./lib/dummy-locale.js",
+    "ocp-i18n-to-po": "./lib/i18n-to-po.js",
+    "ocp-i18n-po-to-i18n": "./lib/po-to-i18n.js",
+    "ocp-i18n-replace-br": "./bin/replace-br.sh",
+    "ocp-i18n-export-pos": "./bin/export-pos.sh",
+    "ocp-i18n-memsource-upload": "./bin/memsource-upload.sh",
+    "ocp-i18n-memsource-download": "./bin/memsource-download.sh"
+  },
+  "dependencies": {
+    "i18next-conv": "^16.0.0",
+    "minimist": "^1.2.8",
+    "pluralize": "^8.0.0"
+  },
+  "keywords": [
+    "i18n",
+    "localization",
+    "openshift",
+    "console-plugin",
+    "memsource",
+    "phrase",
+    "ocp"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/avivtur/ocp-plugin-i18n-scripts.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "README.md"
+  ]
+}
