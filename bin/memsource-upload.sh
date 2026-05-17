@@ -37,9 +37,9 @@ done
 BRANCH=$(git branch --show-current)
 
 TITLE=$(echo "$PROJECT_TITLE_TEMPLATE" | sed \
-  -e "s/\\\$VERSION/$VERSION/g" \
-  -e "s/\\\$SPRINT/$SPRINT/g" \
-  -e "s/\\\$BRANCH/$BRANCH/g")
+  -e "s|\\\$VERSION|$VERSION|g" \
+  -e "s|\\\$SPRINT|$SPRINT|g" \
+  -e "s|\\\$BRANCH|$BRANCH|g")
 
 echo "Creating project with title \"$TITLE\""
 
