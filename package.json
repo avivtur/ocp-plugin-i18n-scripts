@@ -1,6 +1,6 @@
 {
   "name": "ocp-plugin-i18n-scripts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Reusable i18n/localization scripts for OpenShift Console dynamic plugins with Memsource/Phrase integration",
   "license": "Apache-2.0",
   "bin": {
